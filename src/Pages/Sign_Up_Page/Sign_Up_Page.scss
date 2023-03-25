@@ -1,0 +1,101 @@
+.su_main {
+    width: 100vw;
+    min-width: 100vw;
+    height: 100vh;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgb(95, 169, 255);
+
+    .su_m_cont {
+        background-color: white;
+        width: 660px;
+        height: 440px;
+        border-radius: 10px;
+        box-shadow: 1px 20px 20px rgba($color: #000000, $alpha: 0.1);
+        padding: 40px 50px 40px 50px;
+        border: 1px solid rgb(230, 230, 230);
+    }
+
+    .su_m_cont > h1 {
+        font-family: 'Poppins-Bold', sans-serif;
+        font-weight: bold;
+        font-size: 23px;
+        margin-bottom: 20px;
+    }
+
+    .su_m_c_inputs {
+        display: flex;
+        width: '100%';
+        height: '100%';
+        justify-content: space-between;
+        flex-wrap: wrap;
+        flex-basis: 250px;
+    }
+}
+
+// @media (max-width: 600px) {
+//     .su_main {
+//         overflow-y: scroll;
+//         -ms-overflow-style: none;
+//         scrollbar-width: none;
+
+//         &::-webkit-scrollbar {
+//             display: none;
+//         }
+
+//         .su_m_cont {
+//             width: 100vw;
+//             min-height: 1050px;
+//             height: 1050px;
+//             padding: 40px 30px 40px 30px;
+//         }
+
+//         .su_m_cont > h1 {
+//             margin-top: 80px;
+//             font-size: 22px;
+//             letter-spacing: 0.2px;
+//             margin-bottom: 7px;
+//         }
+
+//         .su_m_c_inputs {
+//             display: flex;
+//             width: '100%';
+//             height: '100%';
+//             justify-content: space-between;
+//             flex-wrap: wrap;
+//             flex-basis: 90vw;
+//         }
+//     }
+// }
+
+@media (max-width: 600px) {
+    .su_main {
+        .su_m_cont {
+            width: 90%;
+            height: auto;
+            padding: 30px;
+        }
+
+        .su_m_cont > h1 {
+            font-size: 20px;
+            margin-bottom: 15px;
+        }
+
+        .su_m_c_inputs {
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+
+            & > span {
+                width: 100%;
+                margin-bottom: 20px;
+
+                & > * {
+                    max-width: 100%;
+                }
+            }
+        }
+    }
+}
