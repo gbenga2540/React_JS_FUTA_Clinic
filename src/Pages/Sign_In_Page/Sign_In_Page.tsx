@@ -13,13 +13,7 @@ const SignInPage: FunctionComponent = () => {
     const [cPassword, setCPassword] = useState<string>('');
 
     const send_user_info = () => {
-        const userInfo = {
-            fullName,
-            email,
-            password,
-            cPassword,
-        };
-        console.log(userInfo);
+        navigate('/');
     };
 
     return (

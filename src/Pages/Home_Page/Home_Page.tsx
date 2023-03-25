@@ -27,7 +27,7 @@ const HomePage: FunctionComponent = () => {
                     <BasicButton
                         marginTop={5}
                         marginBottom={15}
-                        onClick={() => navigate('/account')}
+                        onClick={() => navigate('/students')}
                         title="View Students"
                     />
                     <p>Sign Out?</p>

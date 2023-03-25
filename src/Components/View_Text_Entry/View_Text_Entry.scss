@@ -1,0 +1,32 @@
+.vti_main {
+    width: 250px;
+    display: flex;
+    flex-direction: column;
+
+    .v_m_title {
+        color: rgb(70, 70, 70);
+        font-family: 'Poppins-Regular', sans-serif;
+        margin-bottom: 10px;
+        margin-top: 25px;
+        font-size: 1.2rem;
+    }
+
+    .v_m_input {
+        border: 1px solid rgb(230, 230, 230);
+        height: 45px;
+        padding-left: 10px;
+        border-radius: 3px;
+        outline: none;
+    }
+}
+
+@media (max-width: 720px) {
+    .vti_main {
+        width: 100%;
+
+        .v_m_title {
+            margin-bottom: 7px;
+            font-size: 1rem;
+        }
+    }
+}
