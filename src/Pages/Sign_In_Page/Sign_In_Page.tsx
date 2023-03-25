@@ -1,11 +1,11 @@
 import React, { FunctionComponent, useState } from 'react';
-import './Sign_Up_Page.scss';
+import './Sign_In_Page.scss';
 import BasicTextEntry from '../../Components/Basic_Text_Entry/Basic_Text_Entry';
 import BasicButton from '../../Components/Basic_Button/Basic_Button';
 import SecureTextEntry from '../../Components/Secure_Text_Entry/Secure_Text_Entry';
 import { useNavigate } from 'react-router-dom';
 
-const SignUpPage: FunctionComponent = () => {
+const SignInPage: FunctionComponent = () => {
     const navigate = useNavigate();
     const [fullName, setFullName] = useState<string>('');
     const [email, setEmail] = useState<string>('');
@@ -23,10 +23,10 @@ const SignUpPage: FunctionComponent = () => {
     };
 
     return (
-        <main className="su_main">
-            <div className="su_m_cont">
-                <h1>Register</h1>
-                <div className="su_m_c_inputs">
+        <main className="si_main">
+            <div className="si_m_cont">
+                <h1>Login</h1>
+                <div className="si_m_c_inputs">
                     <span>
                         <BasicTextEntry
                             title="Email"
@@ -35,25 +35,10 @@ const SignUpPage: FunctionComponent = () => {
                             placeHolder="johndoe@gmail.com"
                             inputType={'email'}
                         />
-                        <BasicTextEntry
-                            title="Full Name"
-                            inputValue={fullName}
-                            setInputValue={setFullName}
-                            placeHolder="John Doe"
-                            inputType={'text'}
-                        />
-                    </span>
-                    <span>
                         <SecureTextEntry
                             title="Password"
                             inputValue={password}
                             setInputValue={setPassword}
-                            placeHolder="******"
-                        />
-                        <SecureTextEntry
-                            title="Confirm Password"
-                            inputValue={cPassword}
-                            setInputValue={setCPassword}
                             placeHolder="******"
                         />
                     </span>
@@ -61,15 +46,15 @@ const SignUpPage: FunctionComponent = () => {
                 <BasicButton
                     marginTop={30}
                     onClick={send_user_info}
-                    title="Sign Up"
+                    title="Sign In"
                 />
                 <p className="su_login">
-                    Already have an account?{' '}
-                    <span onClick={() => navigate('/login')}>Login</span>
+                    Don't have an account?{' '}
+                    <span onClick={() => navigate('/register')}>SignUp</span>
                 </p>
             </div>
         </main>
     );
 };
 
-export default SignUpPage;
+export default SignInPage;

@@ -3,8 +3,8 @@
     justify-content: center;
     align-items: center;
     height: 45px;
-    width: 120px;
-    min-width: 120px;
+    width: 130px;
+    min-width: 130px;
     color: white;
     background-color: rgb(36, 138, 255);
     border-radius: 6px;
@@ -14,5 +14,11 @@
     &:hover {
         background-color: rgb(83, 163, 255);
         transform: scale(1.03);
+    }
+}
+
+@media (max-width: 720px) {
+    .btn_main {
+        width: 100%;
     }
 }

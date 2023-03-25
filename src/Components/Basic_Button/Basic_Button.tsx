@@ -3,7 +3,7 @@ import './Basic_Button.scss';
 
 interface BasicButtonProps {
     title: string;
-    marginTop?: number;
+    marginTop?: number | string;
     marginBottom?: number;
     onClick: () => void;
 }

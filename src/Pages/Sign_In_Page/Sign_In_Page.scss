@@ -1,4 +1,4 @@
-.su_main {
+.si_main {
     width: 100vw;
     min-width: 100vw;
     height: 100vh;
@@ -8,9 +8,9 @@
     justify-content: center;
     background-color: rgb(95, 169, 255);
 
-    .su_m_cont {
+    .si_m_cont {
         background-color: white;
-        width: 660px;
+        width: 350px;
         height: 470px;
         border-radius: 10px;
         box-shadow: 1px 20px 20px rgba($color: #000000, $alpha: 0.1);
@@ -18,14 +18,14 @@
         border: 1px solid rgb(230, 230, 230);
     }
 
-    .su_m_cont > h1 {
+    .si_m_cont > h1 {
         font-family: 'Poppins-Bold', sans-serif;
         font-weight: bold;
         font-size: 23px;
         margin-bottom: 20px;
     }
 
-    .su_m_c_inputs {
+    .si_m_c_inputs {
         display: flex;
         width: '100%';
         height: '100%';
@@ -35,7 +35,7 @@
     }
 
     .su_login {
-        font-size: 1rem;
+        font-size: 0.9rem;
         margin-top: 20px;
         display: flex;
         align-items: center;
@@ -48,26 +48,26 @@
             margin-left: 2px;
 
             &:hover {
-                font-size: 1.1rem;
+                font-size: 1rem;
             }
         }
     }
 }
 
 @media (max-width: 720px) {
-    .su_main {
-        .su_m_cont {
+    .si_main {
+        .si_m_cont {
             width: 90%;
             height: auto;
             padding: 30px;
         }
 
-        .su_m_cont > h1 {
+        .si_m_cont > h1 {
             font-size: 20px;
             margin-bottom: 15px;
         }
 
-        .su_m_c_inputs {
+        .si_m_c_inputs {
             flex-direction: column;
             justify-content: center;
             align-items: center;
