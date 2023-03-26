@@ -62,7 +62,7 @@ const StudentInfoPage: FunctionComponent = () => {
                                 data[student_id]?.previous_health_condition ||
                                 ''
                             }
-                            placeHolder="Malaria..."
+                            placeHolder="Sugar allergy"
                             inputType={'text'}
                         />
                     </span>
