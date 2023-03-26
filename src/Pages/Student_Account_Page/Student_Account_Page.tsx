@@ -90,7 +90,7 @@ const StudentAccountPage: FunctionComponent = () => {
                             title="Previous Health Condition"
                             inputValue={phc}
                             setInputValue={setPHC}
-                            placeHolder="Malaria..."
+                            placeHolder="Sugar allergy..."
                             inputType={'text'}
                         />
                     </span>
