@@ -19,6 +19,7 @@ body {
     overflow-y: scroll;
     -ms-overflow-style: none;
     scrollbar-width: none;
+    background-color: rgb(95, 169, 255);
 
     &::-webkit-scrollbar {
         display: none;

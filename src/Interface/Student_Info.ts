@@ -1,13 +1,13 @@
 export interface StudentInfoProps {
-    firstName: string;
-    lastName: string;
-    matricNo: string;
-    age: string;
-    gender: string;
-    phoneNo: string;
-    address: string;
+    first_name: string;
+    last_name: string;
     email: string;
-    phc: string;
-    bloodType: string;
-    bloodGroup: string;
+    matric_no: string;
+    gender: string;
+    age: string;
+    phone_no: string;
+    address: string;
+    blood_type: string;
+    blood_group: string;
+    phc?: string;
 }

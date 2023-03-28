@@ -1,67 +1,183 @@
-import React, { FunctionComponent, useMemo } from 'react';
+import React, { FunctionComponent, useEffect, useMemo, useState } from 'react';
 import './Student_Info_Page.scss';
 import ViewTextEntry from '../../Components/View_Text_Entry/View_Text_Entry';
-import TempData from '../../Temp/Health_Centre_Data.json';
-import { useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
+import Axios from 'axios';
+import { toast } from 'react-toastify';
+import { StudentInfoProps } from '../../Interface/Student_Info';
 
 const StudentInfoPage: FunctionComponent = () => {
     const params = useParams();
-    const student_id = params?.id ? parseInt(params.id) : 0;
-    const data = useMemo(() => TempData, []);
+    const navigate = useNavigate();
+    const student_id = params?.id ? params.id : '';
+    const [studentInfo, setStudentInfo] = useState<StudentInfoProps>({
+        first_name: '',
+        last_name: '',
+        address: '',
+        age: '',
+        blood_group: '',
+        blood_type: '',
+        email: '',
+        gender: '',
+        matric_no: '',
+        phone_no: '',
+        phc: '',
+    });
+
+    useEffect(() => {
+        const get_student_with_id = () => {
+            const toast_id = toast.loading('Please wait...');
+            try {
+                const user_info = localStorage.getItem(
+                    process.env.REACT_APP_USER_INFO as string,
+                );
+                if (
+                    user_info === undefined ||
+                    user_info === null ||
+                    user_info === 'undefined' ||
+                    user_info === 'null'
+                ) {
+                    toast.update(toast_id, {
+                        render: `User Token is missing! Please sign in!`,
+                        type: 'error',
+                        isLoading: false,
+                        autoClose: 2000,
+                    });
+                    navigate('/login');
+                } else {
+                    const token = JSON.parse(user_info || '{}')?.token;
+                    if (token) {
+                        try {
+                            Axios.get(
+                                `${process.env.REACT_APP_REST_API}/students/${student_id}`,
+                                {
+                                    headers: {
+                                        'x-access-token': token,
+                                    },
+                                },
+                            )
+                                .catch(err => {
+                                    if (err) {
+                                        toast.update(toast_id, {
+                                            render: err,
+                                            type: 'error',
+                                            isLoading: false,
+                                            autoClose: 2000,
+                                        });
+                                    }
+                                })
+                                .then(res => {
+                                    if (res?.data?.status === 'success') {
+                                        setStudentInfo(res?.data?.response);
+                                        toast.update(toast_id, {
+                                            render: "Student's Information Loaded!",
+                                            type: 'success',
+                                            isLoading: false,
+                                            autoClose: 500,
+                                        });
+                                    } else if (res?.data?.status === 'error') {
+                                        toast.update(toast_id, {
+                                            render: res?.data?.code,
+                                            type: 'error',
+                                            isLoading: false,
+                                            autoClose: 2000,
+                                        });
+                                    } else {
+                                        toast.update(toast_id, {
+                                            render: "Error loading Student's Information!",
+                                            type: 'error',
+                                            isLoading: false,
+                                            autoClose: 2000,
+                                        });
+                                    }
+                                });
+                        } catch (error) {
+                            toast.update(toast_id, {
+                                render: "Error loading Student's Information!",
+                                type: 'error',
+                                isLoading: false,
+                                autoClose: 2000,
+                            });
+                        }
+                    } else {
+                        toast.update(toast_id, {
+                            render: `User Token is missing! Please sign in!`,
+                            type: 'error',
+                            isLoading: false,
+                            autoClose: 2000,
+                        });
+                        navigate('/login');
+                    }
+                }
+            } catch (err) {
+                toast.update(toast_id, {
+                    render: `User Token is missing! Please sign in!`,
+                    type: 'error',
+                    isLoading: false,
+                    autoClose: 2000,
+                });
+                navigate('/login');
+            }
+        };
+        get_student_with_id();
+    }, []);
 
     return (
         <main className="si_main">
             <div className="sa_m_cont">
                 <h1>Student Information</h1>
-                <p>
-                    Below are the information for {data[student_id]?.matric_no}
-                </p>
+                <p>Below are the information for {studentInfo?.matric_no}</p>
                 <div className="sa_m_c_inputs">
                     <span>
                         <ViewTextEntry
                             title="First Name"
-                            inputValue={`${data[
-                                student_id
-                            ]?.first_name[0]?.toUpperCase()}${data[
-                                student_id
-                            ]?.first_name.slice(1)}`}
+                            inputValue={`${
+                                studentInfo?.first_name
+                                    ? studentInfo?.first_name[0]?.toUpperCase()
+                                    : ''
+                            }${
+                                studentInfo?.first_name
+                                    ? studentInfo?.first_name.slice(1)
+                                    : ''
+                            }`}
                             placeHolder="John"
                             inputType={'text'}
                         />
                         <ViewTextEntry
                             title="Last Name"
-                            inputValue={`${data[
-                                student_id
-                            ]?.last_name[0]?.toUpperCase()}${data[
-                                student_id
-                            ]?.last_name.slice(1)}`}
+                            inputValue={`${
+                                studentInfo?.last_name
+                                    ? studentInfo?.last_name[0]?.toUpperCase()
+                                    : ''
+                            }${
+                                studentInfo?.last_name
+                                    ? studentInfo?.last_name.slice(1)
+                                    : ''
+                            }`}
                             placeHolder="Doe"
                             inputType={'text'}
                         />
                         <ViewTextEntry
                             title="Email"
-                            inputValue={data[student_id]?.email}
+                            inputValue={studentInfo?.email}
                             placeHolder="johndoe@gmail.com"
                             inputType={'text'}
                         />
                         <ViewTextEntry
                             title="Matric Number"
-                            inputValue={data[student_id]?.matric_no}
+                            inputValue={studentInfo?.matric_no}
                             placeHolder="CYS/07/1002"
                             inputType={'text'}
                         />
                         <ViewTextEntry
                             title="Gender"
-                            inputValue={data[student_id]?.sex}
+                            inputValue={studentInfo?.gender}
                             placeHolder="Gender"
                             inputType={'text'}
                         />
                         <ViewTextEntry
                             title="Previous Health Condition"
-                            inputValue={
-                                data[student_id]?.previous_health_condition ||
-                                ''
-                            }
+                            inputValue={studentInfo?.phc || ''}
                             placeHolder="Sugar allergy..."
                             inputType={'text'}
                         />
@@ -69,7 +185,7 @@ const StudentInfoPage: FunctionComponent = () => {
                     <span>
                         <ViewTextEntry
                             title="Age"
-                            inputValue={data[student_id]?.age}
+                            inputValue={studentInfo?.age}
                             placeHolder="20"
                             inputType={'text'}
                         />
@@ -77,31 +193,31 @@ const StudentInfoPage: FunctionComponent = () => {
                             title="Phone Number"
                             inputValue={
                                 parseInt(
-                                    data[student_id]?.phone_no
+                                    studentInfo?.phone_no
                                         ?.toString()
                                         ?.slice(0, 1) as string,
                                 ) === 0
-                                    ? data[student_id]?.phone_no
-                                    : `0${data[student_id]?.phone_no}`
+                                    ? studentInfo?.phone_no
+                                    : `0${studentInfo?.phone_no}`
                             }
                             placeHolder="080########"
                             inputType={'text'}
                         />
                         <ViewTextEntry
                             title="Address"
-                            inputValue={data[student_id]?.address}
+                            inputValue={studentInfo?.address}
                             placeHolder="Lane 4, Alagbaka, Akure."
                             inputType={'text'}
                         />
                         <ViewTextEntry
                             title="Blood Type"
-                            inputValue={data[student_id]?.blood_type}
+                            inputValue={studentInfo?.blood_type}
                             placeHolder="Blood Type"
                             inputType={'text'}
                         />
                         <ViewTextEntry
                             title="Blood Group"
-                            inputValue={data[student_id]?.blood_group}
+                            inputValue={studentInfo?.blood_group}
                             placeHolder="Blood Group"
                             inputType={'text'}
                         />

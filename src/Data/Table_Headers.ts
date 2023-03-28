@@ -21,7 +21,7 @@ export const table_headers = [
     },
     {
         Header: 'Gender',
-        accessor: 'sex',
+        accessor: 'gender',
     },
     {
         Header: 'Phone Number',
@@ -41,7 +41,7 @@ export const table_headers = [
     },
     {
         Header: 'Prev Health Condition',
-        accessor: 'previous_health_condition',
+        accessor: 'phc',
     },
     {
         Header: 'Matric Number',

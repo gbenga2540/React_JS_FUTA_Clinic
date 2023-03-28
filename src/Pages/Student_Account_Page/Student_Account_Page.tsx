@@ -5,11 +5,14 @@ import {
     blood_type,
     gender_data,
 } from '../../Data/Student_Account_Info';
-import { StudentInfoProps } from '../../Interface/Student_Info';
 import BasicTextEntry from '../../Components/Basic_Text_Entry/Basic_Text_Entry';
 import BasicButton from '../../Components/Basic_Button/Basic_Button';
+import { toast } from 'react-toastify';
+import Axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const StudentAccountPage: FunctionComponent = () => {
+    const navigate = useNavigate();
     const [firstName, setFirstName] = useState<string>('');
     const [lastName, setLastName] = useState<string>('');
     const [email, setEmail] = useState<string>('');
@@ -23,20 +26,139 @@ const StudentAccountPage: FunctionComponent = () => {
     const [bloodGroup, setBloodGroup] = useState<string>(blood_group[0]);
 
     const send_user_info = () => {
-        const userInfo: StudentInfoProps = {
-            firstName,
-            lastName,
-            email,
-            matricNo,
-            age,
-            gender,
-            phoneNo,
-            address,
-            phc,
-            bloodType,
-            bloodGroup,
-        };
-        console.log(userInfo);
+        const toast_id = toast.loading('Please wait...');
+        try {
+            const user_info = localStorage.getItem(
+                process.env.REACT_APP_USER_INFO as string,
+            );
+            if (
+                user_info === undefined ||
+                user_info === null ||
+                user_info === 'undefined' ||
+                user_info === 'null'
+            ) {
+                toast.update(toast_id, {
+                    render: `User Token is missing! Please sign in!`,
+                    type: 'error',
+                    isLoading: false,
+                    autoClose: 2000,
+                });
+                navigate('/login');
+            } else {
+                const token = JSON.parse(user_info || '{}')?.token;
+                if (token) {
+                    if (
+                        firstName &&
+                        lastName &&
+                        email &&
+                        matricNo &&
+                        age &&
+                        gender &&
+                        phoneNo &&
+                        address &&
+                        bloodGroup &&
+                        bloodType
+                    ) {
+                        try {
+                            Axios.post(
+                                `${process.env.REACT_APP_REST_API}/students/create`,
+                                {
+                                    first_name: firstName,
+                                    last_name: lastName,
+                                    email: email,
+                                    matric_no: matricNo,
+                                    age: age,
+                                    gender: gender,
+                                    phone_no: phoneNo,
+                                    address: address,
+                                    phc: phc,
+                                    blood_group: bloodGroup,
+                                    blood_type: bloodType,
+                                    headers: {
+                                        'x-access-token': token,
+                                    },
+                                },
+                            )
+                                .catch(err => {
+                                    if (err) {
+                                        toast.update(toast_id, {
+                                            render: err,
+                                            type: 'error',
+                                            isLoading: false,
+                                            autoClose: 2000,
+                                        });
+                                    }
+                                })
+                                .then(res => {
+                                    if (res?.data?.status === 'success') {
+                                        toast.update(toast_id, {
+                                            render: 'Successfully Registered!',
+                                            type: 'success',
+                                            isLoading: false,
+                                            autoClose: 500,
+                                        });
+                                        setFirstName('');
+                                        setLastName('');
+                                        setEmail('');
+                                        setMatricNo('');
+                                        setAge('');
+                                        setGender('');
+                                        setPhoneNo('');
+                                        setAddress('');
+                                        setPHC('');
+                                        setBloodGroup('');
+                                        setBloodType('');
+                                    } else if (res?.data?.status === 'error') {
+                                        toast.update(toast_id, {
+                                            render: res?.data?.code,
+                                            type: 'error',
+                                            isLoading: false,
+                                            autoClose: 2000,
+                                        });
+                                    } else {
+                                        toast.update(toast_id, {
+                                            render: "Error updating Student's Information!",
+                                            type: 'error',
+                                            isLoading: false,
+                                            autoClose: 2000,
+                                        });
+                                    }
+                                });
+                        } catch (error) {
+                            toast.update(toast_id, {
+                                render: "Error updating Student's Information!",
+                                type: 'error',
+                                isLoading: false,
+                                autoClose: 2000,
+                            });
+                        }
+                    } else {
+                        toast.update(toast_id, {
+                            render: `Some fields are missing!`,
+                            type: 'warning',
+                            isLoading: false,
+                            autoClose: 2000,
+                        });
+                    }
+                } else {
+                    toast.update(toast_id, {
+                        render: `User Token is missing! Please sign in!`,
+                        type: 'error',
+                        isLoading: false,
+                        autoClose: 2000,
+                    });
+                    navigate('/login');
+                }
+            }
+        } catch (err) {
+            toast.update(toast_id, {
+                render: `User Token is missing! Please sign in!`,
+                type: 'error',
+                isLoading: false,
+                autoClose: 2000,
+            });
+            navigate('/login');
+        }
     };
 
     return (

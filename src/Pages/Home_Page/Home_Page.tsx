@@ -8,7 +8,10 @@ import { useNavigate } from 'react-router-dom';
 const HomePage: FunctionComponent = () => {
     const navigate = useNavigate();
 
-    const send_user_info = () => {};
+    const sign_out = () => {
+        localStorage.removeItem(process.env.REACT_APP_USER_INFO as string);
+        navigate('/login');
+    };
 
     return (
         <main className="home_main">
@@ -34,7 +37,7 @@ const HomePage: FunctionComponent = () => {
                     <BasicButton
                         marginTop={5}
                         marginBottom={15}
-                        onClick={() => navigate('/login')}
+                        onClick={() => sign_out()}
                         title="Sign Out"
                     />
                 </div>

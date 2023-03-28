@@ -4,16 +4,92 @@ import BasicTextEntry from '../../Components/Basic_Text_Entry/Basic_Text_Entry';
 import BasicButton from '../../Components/Basic_Button/Basic_Button';
 import SecureTextEntry from '../../Components/Secure_Text_Entry/Secure_Text_Entry';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import { email_checker } from '../../Utils/Email_Checker/Email_Checker';
+import Axios from 'axios';
 
 const SignInPage: FunctionComponent = () => {
     const navigate = useNavigate();
-    const [fullName, setFullName] = useState<string>('');
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
-    const [cPassword, setCPassword] = useState<string>('');
 
-    const send_user_info = () => {
-        navigate('/');
+    const sign_in = () => {
+        const toast_id = toast.loading('Please wait...');
+        if (password && email) {
+            if (email_checker(email)) {
+                try {
+                    Axios.post(
+                        `${process.env.REACT_APP_REST_API}/users/auth/signin`,
+                        {
+                            email: email,
+                            password: password,
+                        },
+                    )
+                        .catch(err => {
+                            if (err) {
+                                toast.update(toast_id, {
+                                    render: err,
+                                    type: 'error',
+                                    isLoading: false,
+                                    autoClose: 2000,
+                                });
+                            }
+                        })
+                        .then(res => {
+                            if (res?.data?.status === 'success') {
+                                localStorage.setItem(
+                                    process.env.REACT_APP_USER_INFO as string,
+                                    JSON.stringify(res?.data?.response),
+                                );
+                                toast.update(toast_id, {
+                                    render: 'Successfully Signed In!',
+                                    type: 'success',
+                                    isLoading: false,
+                                    autoClose: 500,
+                                });
+                                setEmail('');
+                                setPassword('');
+                                navigate('/');
+                            } else if (res?.data?.status === 'error') {
+                                toast.update(toast_id, {
+                                    render: res?.data?.code,
+                                    type: 'error',
+                                    isLoading: false,
+                                    autoClose: 2000,
+                                });
+                            } else {
+                                toast.update(toast_id, {
+                                    render: 'Error signing in User!',
+                                    type: 'error',
+                                    isLoading: false,
+                                    autoClose: 2000,
+                                });
+                            }
+                        });
+                } catch (error) {
+                    toast.update(toast_id, {
+                        render: 'Error signing in User!',
+                        type: 'error',
+                        isLoading: false,
+                        autoClose: 2000,
+                    });
+                }
+            } else {
+                toast.update(toast_id, {
+                    render: 'Invalid Email!',
+                    type: 'error',
+                    isLoading: false,
+                    autoClose: 2000,
+                });
+            }
+        } else {
+            toast.update(toast_id, {
+                render: `Some fields are missing!`,
+                type: 'warning',
+                isLoading: false,
+                autoClose: 2000,
+            });
+        }
     };
 
     return (
@@ -37,11 +113,7 @@ const SignInPage: FunctionComponent = () => {
                         />
                     </span>
                 </div>
-                <BasicButton
-                    marginTop={30}
-                    onClick={send_user_info}
-                    title="Sign In"
-                />
+                <BasicButton marginTop={30} onClick={sign_in} title="Sign In" />
                 <p className="su_login">
                     Don't have an account?{' '}
                     <span onClick={() => navigate('/register')}>SignUp</span>
