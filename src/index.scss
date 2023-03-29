@@ -24,6 +24,10 @@ body {
     background-repeat: no-repeat;
     background-size: cover;
 
+    @media (max-width: 500px) {
+        background: url('./Images/background_mobile.jpg');
+    }
+
     &::-webkit-scrollbar {
         display: none;
     }
