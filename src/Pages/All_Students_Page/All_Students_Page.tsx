@@ -141,6 +141,7 @@ const AllStudentsPage: FunctionComponent = () => {
                     />
                 </div>
             )}
+            <div className="asp_dim"></div>
             <div className="asp_main">
                 <h1 className="a_m_h">Student Database</h1>
                 <table {...getTableProps()}>
