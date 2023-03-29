@@ -5,11 +5,13 @@ import { useNavigate, useParams } from 'react-router';
 import Axios from 'axios';
 import { toast } from 'react-toastify';
 import { StudentInfoProps } from '../../Interface/Student_Info';
+import { ClipLoader } from 'react-spinners';
 
 const StudentInfoPage: FunctionComponent = () => {
     const params = useParams();
     const navigate = useNavigate();
     const student_id = params?.id ? params.id : '';
+    const [isLoading, setIsLoading] = useState<boolean>(true);
     const [studentInfo, setStudentInfo] = useState<StudentInfoProps>({
         first_name: '',
         last_name: '',
@@ -26,6 +28,7 @@ const StudentInfoPage: FunctionComponent = () => {
 
     useEffect(() => {
         const get_student_with_id = () => {
+            setIsLoading(true);
             const toast_id = toast.loading('Please wait...');
             try {
                 const user_info = localStorage.getItem(
@@ -37,6 +40,7 @@ const StudentInfoPage: FunctionComponent = () => {
                     user_info === 'undefined' ||
                     user_info === 'null'
                 ) {
+                    setIsLoading(false);
                     toast.update(toast_id, {
                         render: `User Token is missing! Please sign in!`,
                         type: 'error',
@@ -57,6 +61,7 @@ const StudentInfoPage: FunctionComponent = () => {
                                 },
                             )
                                 .catch(err => {
+                                    setIsLoading(false);
                                     if (err) {
                                         toast.update(toast_id, {
                                             render: err,
@@ -68,6 +73,7 @@ const StudentInfoPage: FunctionComponent = () => {
                                 })
                                 .then(res => {
                                     if (res?.data?.status === 'success') {
+                                        setIsLoading(false);
                                         setStudentInfo(res?.data?.response);
                                         toast.update(toast_id, {
                                             render: "Student's Information Loaded!",
@@ -76,6 +82,7 @@ const StudentInfoPage: FunctionComponent = () => {
                                             autoClose: 1000,
                                         });
                                     } else if (res?.data?.status === 'error') {
+                                        setIsLoading(false);
                                         toast.update(toast_id, {
                                             render: res?.data?.code,
                                             type: 'error',
@@ -83,6 +90,7 @@ const StudentInfoPage: FunctionComponent = () => {
                                             autoClose: 2000,
                                         });
                                     } else {
+                                        setIsLoading(false);
                                         toast.update(toast_id, {
                                             render: "Error loading Student's Information!",
                                             type: 'error',
@@ -92,6 +100,7 @@ const StudentInfoPage: FunctionComponent = () => {
                                     }
                                 });
                         } catch (error) {
+                            setIsLoading(false);
                             toast.update(toast_id, {
                                 render: "Error loading Student's Information!",
                                 type: 'error',
@@ -100,6 +109,7 @@ const StudentInfoPage: FunctionComponent = () => {
                             });
                         }
                     } else {
+                        setIsLoading(false);
                         toast.update(toast_id, {
                             render: `User Token is missing! Please sign in!`,
                             type: 'error',
@@ -110,6 +120,7 @@ const StudentInfoPage: FunctionComponent = () => {
                     }
                 }
             } catch (err) {
+                setIsLoading(false);
                 toast.update(toast_id, {
                     render: `User Token is missing! Please sign in!`,
                     type: 'error',
@@ -123,108 +134,123 @@ const StudentInfoPage: FunctionComponent = () => {
     }, []);
 
     return (
-        <main className="si_main">
-            <div className="sa_m_cont">
-                <h1>Student Information</h1>
-                <p>Below are the information for {studentInfo?.matric_no}</p>
-                <div className="sa_m_c_inputs">
-                    <span>
-                        <ViewTextEntry
-                            title="First Name"
-                            inputValue={`${
-                                studentInfo?.first_name
-                                    ? studentInfo?.first_name[0]?.toUpperCase()
-                                    : ''
-                            }${
-                                studentInfo?.first_name
-                                    ? studentInfo?.first_name.slice(1)
-                                    : ''
-                            }`}
-                            placeHolder="John"
-                            inputType={'text'}
-                        />
-                        <ViewTextEntry
-                            title="Last Name"
-                            inputValue={`${
-                                studentInfo?.last_name
-                                    ? studentInfo?.last_name[0]?.toUpperCase()
-                                    : ''
-                            }${
-                                studentInfo?.last_name
-                                    ? studentInfo?.last_name.slice(1)
-                                    : ''
-                            }`}
-                            placeHolder="Doe"
-                            inputType={'text'}
-                        />
-                        <ViewTextEntry
-                            title="Email"
-                            inputValue={studentInfo?.email}
-                            placeHolder="johndoe@gmail.com"
-                            inputType={'text'}
-                        />
-                        <ViewTextEntry
-                            title="Matric Number"
-                            inputValue={studentInfo?.matric_no}
-                            placeHolder="CYS/07/1002"
-                            inputType={'text'}
-                        />
-                        <ViewTextEntry
-                            title="Gender"
-                            inputValue={studentInfo?.gender}
-                            placeHolder="Gender"
-                            inputType={'text'}
-                        />
-                        <ViewTextEntry
-                            title="Previous Health Condition"
-                            inputValue={studentInfo?.phc || ''}
-                            placeHolder="Sugar allergy..."
-                            inputType={'text'}
-                        />
-                    </span>
-                    <span>
-                        <ViewTextEntry
-                            title="Age"
-                            inputValue={studentInfo?.age}
-                            placeHolder="20"
-                            inputType={'text'}
-                        />
-                        <ViewTextEntry
-                            title="Phone Number"
-                            inputValue={
-                                parseInt(
-                                    studentInfo?.phone_no
-                                        ?.toString()
-                                        ?.slice(0, 1) as string,
-                                ) === 0
-                                    ? studentInfo?.phone_no
-                                    : `0${studentInfo?.phone_no}`
-                            }
-                            placeHolder="080########"
-                            inputType={'text'}
-                        />
-                        <ViewTextEntry
-                            title="Address"
-                            inputValue={studentInfo?.address}
-                            placeHolder="Lane 4, Alagbaka, Akure."
-                            inputType={'text'}
-                        />
-                        <ViewTextEntry
-                            title="Blood Type"
-                            inputValue={studentInfo?.blood_type}
-                            placeHolder="Blood Type"
-                            inputType={'text'}
-                        />
-                        <ViewTextEntry
-                            title="Blood Group"
-                            inputValue={studentInfo?.blood_group}
-                            placeHolder="Blood Group"
-                            inputType={'text'}
-                        />
-                    </span>
+        <>
+            {isLoading && (
+                <div className="si_loading">
+                    <ClipLoader
+                        color={'white'}
+                        loading={true}
+                        size={150}
+                        aria-label="Loading Spinner"
+                        data-testid="loader"
+                    />
                 </div>
-            </div>
-        </main>
+            )}
+            <main className="si_main">
+                <div className="sa_m_cont">
+                    <h1>Student Information</h1>
+                    <p>
+                        Below are the information for {studentInfo?.matric_no}
+                    </p>
+                    <div className="sa_m_c_inputs">
+                        <span>
+                            <ViewTextEntry
+                                title="First Name"
+                                inputValue={`${
+                                    studentInfo?.first_name
+                                        ? studentInfo?.first_name[0]?.toUpperCase()
+                                        : ''
+                                }${
+                                    studentInfo?.first_name
+                                        ? studentInfo?.first_name.slice(1)
+                                        : ''
+                                }`}
+                                placeHolder="John"
+                                inputType={'text'}
+                            />
+                            <ViewTextEntry
+                                title="Last Name"
+                                inputValue={`${
+                                    studentInfo?.last_name
+                                        ? studentInfo?.last_name[0]?.toUpperCase()
+                                        : ''
+                                }${
+                                    studentInfo?.last_name
+                                        ? studentInfo?.last_name.slice(1)
+                                        : ''
+                                }`}
+                                placeHolder="Doe"
+                                inputType={'text'}
+                            />
+                            <ViewTextEntry
+                                title="Email"
+                                inputValue={studentInfo?.email}
+                                placeHolder="johndoe@gmail.com"
+                                inputType={'text'}
+                            />
+                            <ViewTextEntry
+                                title="Matric Number"
+                                inputValue={studentInfo?.matric_no}
+                                placeHolder="CYS/07/1002"
+                                inputType={'text'}
+                            />
+                            <ViewTextEntry
+                                title="Gender"
+                                inputValue={studentInfo?.gender}
+                                placeHolder="Gender"
+                                inputType={'text'}
+                            />
+                            <ViewTextEntry
+                                title="Previous Health Condition"
+                                inputValue={studentInfo?.phc || ''}
+                                placeHolder="Sugar allergy..."
+                                inputType={'text'}
+                            />
+                        </span>
+                        <span>
+                            <ViewTextEntry
+                                title="Age"
+                                inputValue={studentInfo?.age}
+                                placeHolder="20"
+                                inputType={'text'}
+                            />
+                            <ViewTextEntry
+                                title="Phone Number"
+                                inputValue={
+                                    parseInt(
+                                        studentInfo?.phone_no
+                                            ?.toString()
+                                            ?.slice(0, 1) as string,
+                                    ) === 0
+                                        ? studentInfo?.phone_no
+                                        : `0${studentInfo?.phone_no}`
+                                }
+                                placeHolder="080########"
+                                inputType={'text'}
+                            />
+                            <ViewTextEntry
+                                title="Address"
+                                inputValue={studentInfo?.address}
+                                placeHolder="Lane 4, Alagbaka, Akure."
+                                inputType={'text'}
+                            />
+                            <ViewTextEntry
+                                title="Blood Type"
+                                inputValue={studentInfo?.blood_type}
+                                placeHolder="Blood Type"
+                                inputType={'text'}
+                            />
+                            <ViewTextEntry
+                                title="Blood Group"
+                                inputValue={studentInfo?.blood_group}
+                                placeHolder="Blood Group"
+                                inputType={'text'}
+                            />
+                        </span>
+                    </div>
+                </div>
+            </main>
+        </>
     );
 };
 
