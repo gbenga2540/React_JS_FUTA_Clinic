@@ -9,7 +9,6 @@
     position: relative;
     display: flex;
     flex-direction: row;
-    background-color: rgb(95, 169, 255);
 
     overflow-y: scroll;
     -ms-overflow-style: none;
@@ -17,4 +16,12 @@
     &::-webkit-scrollbar {
         display: none;
     }
+}
+
+.app_dim {
+    background-color: rgba($color: #000000, $alpha: 0.5);
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    z-index: 1;
 }

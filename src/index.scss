@@ -19,7 +19,10 @@ body {
     overflow-y: scroll;
     -ms-overflow-style: none;
     scrollbar-width: none;
-    background-color: rgb(95, 169, 255);
+    background-color: whitesmoke;
+    background: url('./Images/background.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
 
     &::-webkit-scrollbar {
         display: none;

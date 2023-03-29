@@ -11,46 +11,49 @@ import StudentInfoPage from '../Pages/Student_Info_Page/Student_Info_Page';
 
 const App: FunctionComponent = () => {
     return (
-        <div className="app_main">
-            <BrowserRouter>
-                <Routes>
-                    <Route
-                        path="/"
-                        element={
-                            <ProtectedRoute isAuthenticated={true}>
-                                <HomePage />
-                            </ProtectedRoute>
-                        }
-                    />
-                    <Route
-                        path="/students"
-                        element={
-                            <ProtectedRoute isAuthenticated={true}>
-                                <AllStudentsPage />
-                            </ProtectedRoute>
-                        }
-                    />
-                    <Route
-                        path="/students/:id"
-                        element={
-                            <ProtectedRoute isAuthenticated={true}>
-                                <StudentInfoPage />
-                            </ProtectedRoute>
-                        }
-                    />
-                    <Route
-                        path="/account"
-                        element={
-                            <ProtectedRoute isAuthenticated={true}>
-                                <StudentAccountPage />
-                            </ProtectedRoute>
-                        }
-                    />
-                    <Route path="/register" element={<SignUpPage />} />
-                    <Route path="/login" element={<SignInPage />} />
-                </Routes>
-            </BrowserRouter>
-        </div>
+        <>
+            <div className="app_dim"></div>
+            <div className="app_main">
+                <BrowserRouter>
+                    <Routes>
+                        <Route
+                            path="/"
+                            element={
+                                <ProtectedRoute isAuthenticated={true}>
+                                    <HomePage />
+                                </ProtectedRoute>
+                            }
+                        />
+                        <Route
+                            path="/students"
+                            element={
+                                <ProtectedRoute isAuthenticated={true}>
+                                    <AllStudentsPage />
+                                </ProtectedRoute>
+                            }
+                        />
+                        <Route
+                            path="/students/:id"
+                            element={
+                                <ProtectedRoute isAuthenticated={true}>
+                                    <StudentInfoPage />
+                                </ProtectedRoute>
+                            }
+                        />
+                        <Route
+                            path="/account"
+                            element={
+                                <ProtectedRoute isAuthenticated={true}>
+                                    <StudentAccountPage />
+                                </ProtectedRoute>
+                            }
+                        />
+                        <Route path="/register" element={<SignUpPage />} />
+                        <Route path="/login" element={<SignInPage />} />
+                    </Routes>
+                </BrowserRouter>
+            </div>
+        </>
     );
 };
 
