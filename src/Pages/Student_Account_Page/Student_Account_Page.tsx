@@ -164,7 +164,7 @@ const StudentAccountPage: FunctionComponent = () => {
     return (
         <main className="sa_main">
             <div className="sa_m_cont">
-                <h1>Student Account</h1>
+                <h1>Student Record</h1>
                 <p>
                     Please fill the fields below with the appropraite
                     Information
@@ -262,7 +262,7 @@ const StudentAccountPage: FunctionComponent = () => {
                     marginTop={20}
                     marginBottom={10}
                     onClick={send_user_info}
-                    title="Submit"
+                    title="Upload"
                 />
             </div>
         </main>

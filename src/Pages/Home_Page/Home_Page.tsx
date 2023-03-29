@@ -19,19 +19,19 @@ const HomePage: FunctionComponent = () => {
                 <h1>Welcome to FUTA's Clinic</h1>
                 <p>What would you like to do?</p>
                 <div className="h_m_c_inputs">
-                    <p>Add to Student Database?</p>
+                    <p>Add to Student Records?</p>
                     <BasicButton
                         marginTop={5}
                         marginBottom={15}
                         onClick={() => navigate('/account')}
-                        title="Add Student"
+                        title="New Record"
                     />
-                    <p>View all Students?</p>
+                    <p>View all Records?</p>
                     <BasicButton
                         marginTop={5}
                         marginBottom={15}
                         onClick={() => navigate('/students')}
-                        title="View Students"
+                        title="View Records"
                     />
                     <p>Sign Out?</p>
                     <BasicButton

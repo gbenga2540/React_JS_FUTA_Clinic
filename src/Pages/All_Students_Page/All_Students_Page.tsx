@@ -143,7 +143,7 @@ const AllStudentsPage: FunctionComponent = () => {
             )}
             <div className="asp_dim"></div>
             <div className="asp_main">
-                <h1 className="a_m_h">Student Database</h1>
+                <h1 className="a_m_h">Students Record</h1>
                 <table {...getTableProps()}>
                     <thead>
                         {headerGroups.map(headerGroup => (
