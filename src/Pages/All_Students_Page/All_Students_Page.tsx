@@ -68,7 +68,7 @@ const AllStudentsPage: FunctionComponent = () => {
                                             render: "Student's Data Loaded!",
                                             type: 'success',
                                             isLoading: false,
-                                            autoClose: 500,
+                                            autoClose: 1000,
                                         });
                                     } else if (res?.data?.status === 'error') {
                                         toast.update(toast_id, {

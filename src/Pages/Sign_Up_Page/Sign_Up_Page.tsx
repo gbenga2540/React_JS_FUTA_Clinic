@@ -48,7 +48,7 @@ const SignUpPage: FunctionComponent = () => {
                                     render: 'Successfully Signed In!',
                                     type: 'success',
                                     isLoading: false,
-                                    autoClose: 500,
+                                    autoClose: 1000,
                                 });
                                 setEmail('');
                                 setFullName('');

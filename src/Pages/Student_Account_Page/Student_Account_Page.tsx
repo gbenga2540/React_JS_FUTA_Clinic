@@ -95,7 +95,7 @@ const StudentAccountPage: FunctionComponent = () => {
                                             render: 'Successfully Registered!',
                                             type: 'success',
                                             isLoading: false,
-                                            autoClose: 500,
+                                            autoClose: 1000,
                                         });
                                         setFirstName('');
                                         setLastName('');
