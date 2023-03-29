@@ -5,10 +5,12 @@ import { table_headers } from '../../Data/Table_Headers';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import Axios from 'axios';
+import { ClipLoader } from 'react-spinners';
 
 const AllStudentsPage: FunctionComponent = () => {
     const navigate = useNavigate();
     const [students, setStudents] = useState<any[]>([]);
+    const [isLoading, setIsLoading] = useState<boolean>(true);
 
     const columns = useMemo(() => [...table_headers], []);
 
@@ -21,6 +23,7 @@ const AllStudentsPage: FunctionComponent = () => {
 
     useEffect(() => {
         const get_all_students = () => {
+            setIsLoading(true);
             const toast_id = toast.loading('Please wait...');
             try {
                 const user_info = localStorage.getItem(
@@ -32,6 +35,7 @@ const AllStudentsPage: FunctionComponent = () => {
                     user_info === 'undefined' ||
                     user_info === 'null'
                 ) {
+                    setIsLoading(false);
                     toast.update(toast_id, {
                         render: `User Token is missing! Please sign in!`,
                         type: 'error',
@@ -52,6 +56,7 @@ const AllStudentsPage: FunctionComponent = () => {
                                 },
                             )
                                 .catch(err => {
+                                    setIsLoading(false);
                                     if (err) {
                                         toast.update(toast_id, {
                                             render: err,
@@ -64,6 +69,7 @@ const AllStudentsPage: FunctionComponent = () => {
                                 .then(res => {
                                     if (res?.data?.status === 'success') {
                                         setStudents(res?.data?.response);
+                                        setIsLoading(false);
                                         toast.update(toast_id, {
                                             render: "Student's Data Loaded!",
                                             type: 'success',
@@ -71,6 +77,7 @@ const AllStudentsPage: FunctionComponent = () => {
                                             autoClose: 1000,
                                         });
                                     } else if (res?.data?.status === 'error') {
+                                        setIsLoading(false);
                                         toast.update(toast_id, {
                                             render: res?.data?.code,
                                             type: 'error',
@@ -78,6 +85,7 @@ const AllStudentsPage: FunctionComponent = () => {
                                             autoClose: 2000,
                                         });
                                     } else {
+                                        setIsLoading(false);
                                         toast.update(toast_id, {
                                             render: "Error loading Student's Data!",
                                             type: 'error',
@@ -87,6 +95,7 @@ const AllStudentsPage: FunctionComponent = () => {
                                     }
                                 });
                         } catch (error) {
+                            setIsLoading(false);
                             toast.update(toast_id, {
                                 render: "Error loading Student's Data!",
                                 type: 'error',
@@ -95,6 +104,7 @@ const AllStudentsPage: FunctionComponent = () => {
                             });
                         }
                     } else {
+                        setIsLoading(false);
                         toast.update(toast_id, {
                             render: `User Token is missing! Please sign in!`,
                             type: 'error',
@@ -105,6 +115,7 @@ const AllStudentsPage: FunctionComponent = () => {
                     }
                 }
             } catch (err) {
+                setIsLoading(false);
                 toast.update(toast_id, {
                     render: `User Token is missing! Please sign in!`,
                     type: 'error',
@@ -118,42 +129,57 @@ const AllStudentsPage: FunctionComponent = () => {
     }, []);
 
     return (
-        <div className="asp_main">
-            <h1 className="a_m_h">Student Database</h1>
-            <table {...getTableProps()}>
-                <thead>
-                    {headerGroups.map(headerGroup => (
-                        <tr {...headerGroup.getHeaderGroupProps()}>
-                            {headerGroup.headers.map(column => (
-                                <th {...column.getHeaderProps()}>
-                                    {column.render('Header')}
-                                </th>
-                            ))}
-                        </tr>
-                    ))}
-                </thead>
-                <tbody {...getTableBodyProps()}>
-                    {rows.map(row => {
-                        prepareRow(row);
-                        return (
-                            <tr
-                                onClick={() =>
-                                    navigate(`/students/${row?.original?._id}`)
-                                }
-                                {...row.getRowProps()}>
-                                {row.cells.map(cell => {
-                                    return (
-                                        <td {...cell.getCellProps()}>
-                                            {cell.render('Cell')}
-                                        </td>
-                                    );
-                                })}
+        <>
+            {isLoading && (
+                <div className="asp_loading">
+                    <ClipLoader
+                        color={'white'}
+                        loading={true}
+                        size={150}
+                        aria-label="Loading Spinner"
+                        data-testid="loader"
+                    />
+                </div>
+            )}
+            <div className="asp_main">
+                <h1 className="a_m_h">Student Database</h1>
+                <table {...getTableProps()}>
+                    <thead>
+                        {headerGroups.map(headerGroup => (
+                            <tr {...headerGroup.getHeaderGroupProps()}>
+                                {headerGroup.headers.map(column => (
+                                    <th {...column.getHeaderProps()}>
+                                        {column.render('Header')}
+                                    </th>
+                                ))}
                             </tr>
-                        );
-                    })}
-                </tbody>
-            </table>
-        </div>
+                        ))}
+                    </thead>
+                    <tbody {...getTableBodyProps()}>
+                        {rows.map(row => {
+                            prepareRow(row);
+                            return (
+                                <tr
+                                    onClick={() =>
+                                        navigate(
+                                            `/students/${row?.original?._id}`,
+                                        )
+                                    }
+                                    {...row.getRowProps()}>
+                                    {row.cells.map(cell => {
+                                        return (
+                                            <td {...cell.getCellProps()}>
+                                                {cell.render('Cell')}
+                                            </td>
+                                        );
+                                    })}
+                                </tr>
+                            );
+                        })}
+                    </tbody>
+                </table>
+            </div>
+        </>
     );
 };
 
