@@ -14,8 +14,10 @@ const SignUpPage: FunctionComponent = () => {
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
     const [cPassword, setCPassword] = useState<string>('');
+    const [disableButton, setDisableButton] = useState<boolean>(false);
 
     const sign_up = () => {
+        setDisableButton(true);
         const toast_id = toast.loading('Please wait...');
         if (password === cPassword && password && fullName && email) {
             if (email_checker(email)) {
@@ -29,6 +31,7 @@ const SignUpPage: FunctionComponent = () => {
                         },
                     )
                         .catch(err => {
+                            setDisableButton(false);
                             if (err) {
                                 toast.update(toast_id, {
                                     render: err,
@@ -44,6 +47,7 @@ const SignUpPage: FunctionComponent = () => {
                                     process.env.REACT_APP_USER_INFO as string,
                                     JSON.stringify(res?.data?.response),
                                 );
+                                setDisableButton(false);
                                 toast.update(toast_id, {
                                     render: 'Successfully Signed In!',
                                     type: 'success',
@@ -56,6 +60,7 @@ const SignUpPage: FunctionComponent = () => {
                                 setCPassword('');
                                 navigate('/');
                             } else if (res?.data?.status === 'error') {
+                                setDisableButton(false);
                                 toast.update(toast_id, {
                                     render: res?.data?.code,
                                     type: 'error',
@@ -63,6 +68,7 @@ const SignUpPage: FunctionComponent = () => {
                                     autoClose: 2000,
                                 });
                             } else {
+                                setDisableButton(false);
                                 toast.update(toast_id, {
                                     render: 'Error signing up User!',
                                     type: 'error',
@@ -72,6 +78,7 @@ const SignUpPage: FunctionComponent = () => {
                             }
                         });
                 } catch (error) {
+                    setDisableButton(false);
                     toast.update(toast_id, {
                         render: 'Error signing up User!',
                         type: 'error',
@@ -80,6 +87,7 @@ const SignUpPage: FunctionComponent = () => {
                     });
                 }
             } else {
+                setDisableButton(false);
                 toast.update(toast_id, {
                     render: 'Invalid Email!',
                     type: 'error',
@@ -88,6 +96,7 @@ const SignUpPage: FunctionComponent = () => {
                 });
             }
         } else {
+            setDisableButton(false);
             toast.update(toast_id, {
                 render: `Some fields are missing!`,
                 type: 'warning',
@@ -133,7 +142,12 @@ const SignUpPage: FunctionComponent = () => {
                         />
                     </span>
                 </div>
-                <BasicButton marginTop={30} onClick={sign_up} title="Sign Up" />
+                <BasicButton
+                    marginTop={30}
+                    onClick={sign_up}
+                    title="Sign Up"
+                    disableButton={disableButton}
+                />
                 <p className="su_login">
                     Already have an account?{' '}
                     <span onClick={() => navigate('/login')}>Login</span>

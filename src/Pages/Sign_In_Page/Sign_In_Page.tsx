@@ -12,8 +12,10 @@ const SignInPage: FunctionComponent = () => {
     const navigate = useNavigate();
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
+    const [disableButton, setDisableButton] = useState<boolean>(false);
 
     const sign_in = () => {
+        setDisableButton(true);
         const toast_id = toast.loading('Please wait...');
         if (password && email) {
             if (email_checker(email)) {
@@ -26,6 +28,7 @@ const SignInPage: FunctionComponent = () => {
                         },
                     )
                         .catch(err => {
+                            setDisableButton(false);
                             if (err) {
                                 toast.update(toast_id, {
                                     render: err,
@@ -41,6 +44,7 @@ const SignInPage: FunctionComponent = () => {
                                     process.env.REACT_APP_USER_INFO as string,
                                     JSON.stringify(res?.data?.response),
                                 );
+                                setDisableButton(false);
                                 toast.update(toast_id, {
                                     render: 'Successfully Signed In!',
                                     type: 'success',
@@ -51,6 +55,7 @@ const SignInPage: FunctionComponent = () => {
                                 setPassword('');
                                 navigate('/');
                             } else if (res?.data?.status === 'error') {
+                                setDisableButton(false);
                                 toast.update(toast_id, {
                                     render: res?.data?.code,
                                     type: 'error',
@@ -58,6 +63,7 @@ const SignInPage: FunctionComponent = () => {
                                     autoClose: 2000,
                                 });
                             } else {
+                                setDisableButton(false);
                                 toast.update(toast_id, {
                                     render: 'Error signing in User!',
                                     type: 'error',
@@ -67,6 +73,7 @@ const SignInPage: FunctionComponent = () => {
                             }
                         });
                 } catch (error) {
+                    setDisableButton(false);
                     toast.update(toast_id, {
                         render: 'Error signing in User!',
                         type: 'error',
@@ -75,6 +82,7 @@ const SignInPage: FunctionComponent = () => {
                     });
                 }
             } else {
+                setDisableButton(false);
                 toast.update(toast_id, {
                     render: 'Invalid Email!',
                     type: 'error',
@@ -83,6 +91,7 @@ const SignInPage: FunctionComponent = () => {
                 });
             }
         } else {
+            setDisableButton(false);
             toast.update(toast_id, {
                 render: `Some fields are missing!`,
                 type: 'warning',

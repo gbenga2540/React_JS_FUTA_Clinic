@@ -24,8 +24,10 @@ const StudentAccountPage: FunctionComponent = () => {
     const [phc, setPHC] = useState<string>('');
     const [bloodType, setBloodType] = useState<string>(blood_type[0]);
     const [bloodGroup, setBloodGroup] = useState<string>(blood_group[0]);
+    const [disableButton, setDisableButton] = useState<boolean>(false);
 
     const send_user_info = () => {
+        setDisableButton(true);
         const toast_id = toast.loading('Please wait...');
         try {
             const user_info = localStorage.getItem(
@@ -37,6 +39,7 @@ const StudentAccountPage: FunctionComponent = () => {
                 user_info === 'undefined' ||
                 user_info === 'null'
             ) {
+                setDisableButton(false);
                 toast.update(toast_id, {
                     render: `User Token is missing! Please sign in!`,
                     type: 'error',
@@ -80,6 +83,7 @@ const StudentAccountPage: FunctionComponent = () => {
                                 },
                             )
                                 .catch(err => {
+                                    setDisableButton(false);
                                     if (err) {
                                         toast.update(toast_id, {
                                             render: err,
@@ -91,6 +95,7 @@ const StudentAccountPage: FunctionComponent = () => {
                                 })
                                 .then(res => {
                                     if (res?.data?.status === 'success') {
+                                        setDisableButton(false);
                                         toast.update(toast_id, {
                                             render: 'Successfully Registered!',
                                             type: 'success',
@@ -109,6 +114,7 @@ const StudentAccountPage: FunctionComponent = () => {
                                         setBloodGroup('');
                                         setBloodType('');
                                     } else if (res?.data?.status === 'error') {
+                                        setDisableButton(false);
                                         toast.update(toast_id, {
                                             render: res?.data?.code,
                                             type: 'error',
@@ -116,6 +122,7 @@ const StudentAccountPage: FunctionComponent = () => {
                                             autoClose: 2000,
                                         });
                                     } else {
+                                        setDisableButton(false);
                                         toast.update(toast_id, {
                                             render: "Error updating Student's Information!",
                                             type: 'error',
@@ -125,6 +132,7 @@ const StudentAccountPage: FunctionComponent = () => {
                                     }
                                 });
                         } catch (error) {
+                            setDisableButton(false);
                             toast.update(toast_id, {
                                 render: "Error updating Student's Information!",
                                 type: 'error',
@@ -133,6 +141,7 @@ const StudentAccountPage: FunctionComponent = () => {
                             });
                         }
                     } else {
+                        setDisableButton(false);
                         toast.update(toast_id, {
                             render: `Some fields are missing!`,
                             type: 'warning',
@@ -141,6 +150,7 @@ const StudentAccountPage: FunctionComponent = () => {
                         });
                     }
                 } else {
+                    setDisableButton(false);
                     toast.update(toast_id, {
                         render: `User Token is missing! Please sign in!`,
                         type: 'error',
@@ -151,6 +161,7 @@ const StudentAccountPage: FunctionComponent = () => {
                 }
             }
         } catch (err) {
+            setDisableButton(false);
             toast.update(toast_id, {
                 render: `User Token is missing! Please sign in!`,
                 type: 'error',
@@ -263,6 +274,7 @@ const StudentAccountPage: FunctionComponent = () => {
                     marginBottom={10}
                     onClick={send_user_info}
                     title="Upload"
+                    disableButton={disableButton}
                 />
             </div>
         </main>
