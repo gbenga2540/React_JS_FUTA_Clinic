@@ -122,7 +122,12 @@ const SignInPage: FunctionComponent = () => {
                         />
                     </span>
                 </div>
-                <BasicButton marginTop={30} onClick={sign_in} title="Sign In" />
+                <BasicButton
+                    marginTop={30}
+                    onClick={sign_in}
+                    title="Sign In"
+                    disableButton={disableButton}
+                />
                 <p className="su_login">
                     Don't have an account?{' '}
                     <span onClick={() => navigate('/register')}>SignUp</span>
