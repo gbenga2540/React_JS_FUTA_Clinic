@@ -19,68 +19,79 @@ const SignUpPage: FunctionComponent = () => {
     const sign_up = () => {
         setDisableButton(true);
         const toast_id = toast.loading('Please wait...');
-        if (password === cPassword && password && fullName && email) {
-            if (email_checker(email)) {
-                try {
-                    Axios.post(
-                        `${process.env.REACT_APP_REST_API}/users/auth/signup`,
-                        {
-                            full_name: fullName,
-                            email: email,
-                            password: password,
-                        },
-                    )
-                        .catch(err => {
-                            setDisableButton(false);
-                            if (err) {
-                                toast.update(toast_id, {
-                                    render: err,
-                                    type: 'error',
-                                    isLoading: false,
-                                    autoClose: 2000,
-                                });
-                            }
-                        })
-                        .then(res => {
-                            if (res?.data?.status === 'success') {
-                                localStorage.setItem(
-                                    process.env.REACT_APP_USER_INFO as string,
-                                    JSON.stringify(res?.data?.response),
-                                );
+        if (cPassword && password && fullName && email) {
+            if (password === cPassword) {
+                if (email_checker(email)) {
+                    try {
+                        Axios.post(
+                            `${process.env.REACT_APP_REST_API}/users/auth/signup`,
+                            {
+                                full_name: fullName,
+                                email: email,
+                                password: password,
+                            },
+                        )
+                            .catch(err => {
                                 setDisableButton(false);
-                                toast.update(toast_id, {
-                                    render: 'Successfully Signed In!',
-                                    type: 'success',
-                                    isLoading: false,
-                                    autoClose: 1000,
-                                });
-                                setEmail('');
-                                setFullName('');
-                                setPassword('');
-                                setCPassword('');
-                                navigate('/');
-                            } else if (res?.data?.status === 'error') {
-                                setDisableButton(false);
-                                toast.update(toast_id, {
-                                    render: res?.data?.code,
-                                    type: 'error',
-                                    isLoading: false,
-                                    autoClose: 2000,
-                                });
-                            } else {
-                                setDisableButton(false);
-                                toast.update(toast_id, {
-                                    render: 'Error signing up User!',
-                                    type: 'error',
-                                    isLoading: false,
-                                    autoClose: 2000,
-                                });
-                            }
+                                if (err) {
+                                    toast.update(toast_id, {
+                                        render: err,
+                                        type: 'error',
+                                        isLoading: false,
+                                        autoClose: 2000,
+                                    });
+                                }
+                            })
+                            .then(res => {
+                                if (res?.data?.status === 'success') {
+                                    localStorage.setItem(
+                                        process.env
+                                            .REACT_APP_USER_INFO as string,
+                                        JSON.stringify(res?.data?.response),
+                                    );
+                                    setDisableButton(false);
+                                    toast.update(toast_id, {
+                                        render: 'Successfully Signed In!',
+                                        type: 'success',
+                                        isLoading: false,
+                                        autoClose: 1000,
+                                    });
+                                    setEmail('');
+                                    setFullName('');
+                                    setPassword('');
+                                    setCPassword('');
+                                    navigate('/');
+                                } else if (res?.data?.status === 'error') {
+                                    setDisableButton(false);
+                                    toast.update(toast_id, {
+                                        render: res?.data?.code,
+                                        type: 'error',
+                                        isLoading: false,
+                                        autoClose: 2000,
+                                    });
+                                } else {
+                                    setDisableButton(false);
+                                    toast.update(toast_id, {
+                                        render: 'Error signing up User!',
+                                        type: 'error',
+                                        isLoading: false,
+                                        autoClose: 2000,
+                                    });
+                                }
+                            });
+                    } catch (error) {
+                        setDisableButton(false);
+                        toast.update(toast_id, {
+                            render: 'Error signing up User!',
+                            type: 'error',
+                            isLoading: false,
+                            autoClose: 2000,
                         });
-                } catch (error) {
+                    }
+                } else {
                     setDisableButton(false);
                     toast.update(toast_id, {
-                        render: 'Error signing up User!',
+                        render: 'Invalid Email!',
                         type: 'error',
                         isLoading: false,
                         autoClose: 2000,
@@ -89,7 +100,7 @@ const SignUpPage: FunctionComponent = () => {
             } else {
                 setDisableButton(false);
                 toast.update(toast_id, {
-                    render: 'Invalid Email!',
+                    render: 'Passwords do not match!',
                     type: 'error',
                     isLoading: false,
                     autoClose: 2000,
