@@ -68,7 +68,28 @@ const AllStudentsPage: FunctionComponent = () => {
                                 })
                                 .then(res => {
                                     if (res?.data?.status === 'success') {
-                                        setStudents(res?.data?.response);
+                                        const students_data =
+                                            res?.data?.response;
+                                        let new_data = [];
+                                        for (
+                                            let i = 0;
+                                            i < students_data.length;
+                                            i++
+                                        ) {
+                                            let p_data = {};
+                                            p_data = {
+                                                ...students_data[i],
+                                                matric_no: `${students_data[
+                                                    i
+                                                ]?.matric_no
+                                                    ?.slice(0, 3)
+                                                    ?.toUpperCase()}${students_data[
+                                                    i
+                                                ]?.matric_no?.slice(3)}`,
+                                            };
+                                            new_data.push(p_data);
+                                        }
+                                        setStudents(new_data);
                                         setIsLoading(false);
                                         toast.update(toast_id, {
                                             render: "Student's Data Loaded!",
